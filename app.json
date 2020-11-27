@@ -1,0 +1,12 @@
+{
+  "name": "myScieCalcu",
+  "displayName": "myScieCalcu",
+  "expo": {
+    "name": "myScieCalcu",
+    "slug": "myScieCalcu",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
