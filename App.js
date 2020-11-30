@@ -1,28 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{Component} from 'react';
-import { StyleSheet, Text, View, YellowBox } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { greaterThan } from 'react-native-reanimated';
-
+import { Button, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import InputNumberButton from './InputNumberButton'
+const buttons = [
+  ['CLEAR','DEL'],
+  [ 7 ,8,9,'/'],
+  [4,5,6,'*'],
+  [1,2,3,'-'],
+  [1,'.','=','+'],
+];
 class App extends Component{
+ renderButtons() {
+    let layouts = buttons.map((buttonRows,index) =>{
+    let rowItem =buttonRows.map((buttonItem,buttonIndex)=>{
+      return <InputNumberButton
+      value={buttonItem}
+      handleOnPress={() =>{}}
+       key={`btn-`+ buttonIndex}/>
+    });
+    
+  return <View style={styles.inputRow} key={'row' + index}>{rowItem}</View>
+    });
+    return layouts
+}
+
   render(){
+ 
   return (
+    
     <View style={styles.container}>
      
-      <View style={styles.calculate}></View>
-      <View style={styles.result}></View>
-      <View style={styles.buttons}> 
-        <View style={styles.numbers}></View>
-           <View style={styles.opraters}>
-             <View><Text>1</Text></View>
-             <View><Text>2</Text></View>
-             <View><Text>3</Text></View>
-             <View><Text>4</Text></View>
-             <View><Text>5</Text></View>
-           </View>
-
+      <View style={styles.calculateContainer}>
+        <Text>11*11</Text>
       </View>
-      
+
+      <View style={styles.resultContainer}>
+        <Text style={styles.resultText}>111</Text>
+      </View>
+    
+      <View style={styles.InputContainer}> 
+      {this.renderButtons()}
+      </View>
     </View>
   );
   }
@@ -32,30 +50,40 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   
   },
-  calculate: {
+  calculateContainer: {
     flex:2,
-    
-    backgroundColor: 'red',
+    fontSize:10,
+    alignItems:"flex-end",
+    backgroundColor: 'white',
   },
-  result: {
+
+  resultContainer: {
+flex:2,
+// fontSize:10,
+// alignItems:"flex-end",
+justifyContent:"center",
+backgroundColor: 'white',
+  },
+
+  InputContainer: {
+    flex:8,
+    backgroundColor:'#3D0075',
+    
+  },
+
+  inputRow: {
 flex:1,
-backgroundColor: 'blue',
+flexDirection:'row'
+
   },
-  buttons: {
-    flex:7,
-    flexDirection:"row",
-    flexGrow:5,
-  },
-  numbers: {
-    flex:5,
-    backgroundColor: 'black',
-  },
-  opraters: {
-    flex:2,
-    
-    backgroundColor: 'gray',
-  },
+  
+  resultText: {
+    color:'white',
+    fontSize:80,
+    fontFamily:'bold',
+    textAlign:'right'
+  }
+  
 });
