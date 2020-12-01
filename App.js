@@ -1,21 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
+import { setStatusBarBackgroundColor, StatusBar } from 'expo-status-bar';
 import React,{Component} from 'react';
 import { Button, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import InputNumberButton from './InputNumberButton'
 const buttons = [
-  ['CLEAR','DEL'],
-  [ 7 ,8,9,'/'],
-  [4,5,6,'*'],
-  [1,2,3,'-'],
-  [1,'.','=','+'],
+  ['CLEAR','DELETE'],
+  ['7' ,'8','9','/'],
+  ['4','5','6','*'],
+  ['1','2','3','-'],
+  ['1','.','=','+'],
 ];
 class App extends Component{
+  constructor(){
+    super();
+    this.initialState = {
+      displayValue:'0',
+      oprarter:null,
+      firstValue:'',
+      secondValue:'',
+      nextValue:false,
+    }
+    this.state=this.initialState
+  
+  }
  renderButtons() {
     let layouts = buttons.map((buttonRows,index) =>{
     let rowItem =buttonRows.map((buttonItem,buttonIndex)=>{
       return <InputNumberButton
       value={buttonItem}
-      handleOnPress={() =>{}}
+      handleOnPress={this.hundleInPut.bind(this,buttonItem)}
        key={`btn-`+ buttonIndex}/>
     });
     
@@ -24,6 +36,53 @@ class App extends Component{
     return layouts
 }
 
+hundleInPut= (input) => {
+  const {displayValue,oprarter,initialState}=this.state;
+  switch(input){
+    case "0":
+    case "1":
+    case "2":
+    case "3":
+   case "4":
+   case "5":
+   case "6":
+   case "7":
+   case "8":
+    case "9":
+      this.setState({displayValue: (displayValue ==='0')? input : displayValue + input});
+     break;
+     case "*":
+      case "-":
+        case "+":
+          case "/":
+            case "=":
+              this.setState(
+                {
+                  oprarter:input,
+                  displayValue: (oprarter !==null ? displayValue.substr(0, displayValue.length - 1) : displayValue )+ input}
+                );
+              break;
+              case".":
+              let dot=displayValue.slice(-1)
+              this.setState({
+                
+                displayValue:(dot!=='.'?displayValue + input:displayValue)
+              })
+              break;
+              case "DELETE":
+                let string = displayValue.toString();
+                let deletString= string.substr(0,string.length - 1);
+                let length=string.length
+               this.setState(
+               { displayValue: (length == 1? "0":deletString)})
+                break;
+                case "CLEAR":
+                this.setState(this.initialState);
+                break;
+
+  }
+
+}
   render(){
  
   return (
@@ -31,7 +90,7 @@ class App extends Component{
     <View style={styles.container}>
      
       <View style={styles.calculateContainer}>
-        <Text>11*11</Text>
+  <Text style={styles.textOutPut}>{this.state.displayValue}</Text>
       </View>
 
       <View style={styles.resultContainer}>
@@ -84,6 +143,9 @@ flexDirection:'row'
     fontSize:80,
     fontFamily:'bold',
     textAlign:'right'
+  },
+  textOutPut:{
+    fontSize:40
   }
   
 });
