@@ -7,7 +7,7 @@ const buttons = [
   ['7' ,'8','9','/'],
   ['4','5','6','*'],
   ['1','2','3','-'],
-  ['1','.','=','+'],
+  ['0','.','=','+'],
 ];
 class App extends Component{
   constructor(){
@@ -37,7 +37,7 @@ class App extends Component{
 }
 
 hundleInPut= (input) => {
-  const {displayValue,oprarter,initialState}=this.state;
+  const {displayValue,oprarter,initialState,secondValue,firstValue,nextValue}=this.state;
   switch(input){
     case "0":
     case "1":
@@ -50,23 +50,48 @@ hundleInPut= (input) => {
    case "8":
     case "9":
       this.setState({displayValue: (displayValue ==='0')? input : displayValue + input});
-     break;
+      if(!nextValue){
+        this.setState({firstValue:firstValue + input})
+      }else{
+        this.setState({secondValue:secondValue + input})
+      }
+      break;
      case "*":
       case "-":
         case "+":
           case "/":
-            case "=":
+            
               this.setState(
                 {
+                  nextValue:true,
                   oprarter:input,
                   displayValue: (oprarter !==null ? displayValue.substr(0, displayValue.length - 1) : displayValue )+ input}
                 );
+               
               break;
               case".":
-              let dot=displayValue.slice(-1)
+              let dot=displayValue.toString().slice(-1)
               this.setState({
                 
                 displayValue:(dot!=='.'?displayValue + input:displayValue)
+              })
+
+              if(!nextValue){
+                this.setState({firstValue:firstValue + input})
+              }else{
+                this.setState({secondValue:secondValue + input})
+              }
+
+              break;
+              case'=':
+              let formatOprater=(oprarter =='x')? '*':(oprarter== '÷')?'/':oprarter;
+              let result = eval(firstValue + formatOprater + secondValue);
+              this.setState({
+                displayValue:result % 1 === 0 ? result:result.toFixed(2),
+                firstValue:result % 1 === 0 ? result:result.toFixed(2),
+                secondValue:"",
+                oprarter:null,
+                nextValue:false,
               })
               break;
               case "DELETE":
@@ -74,7 +99,9 @@ hundleInPut= (input) => {
                 let deletString= string.substr(0,string.length - 1);
                 let length=string.length
                this.setState(
-               { displayValue: (length == 1? "0":deletString)})
+               { displayValue: (length == 1? "0":deletString),
+               firstValue:(length == 1? "":deletString)
+              })
                 break;
                 case "CLEAR":
                 this.setState(this.initialState);

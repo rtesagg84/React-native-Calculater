@@ -4,7 +4,9 @@ export default class InputNumberButton extends Component {
     render(){
         const{value,handleOnPress}=this.props
         return(
-        <TouchableOpacity onPress={()=>handleOnPress(value)} style={styles.container}><Text style={styles.text}>{value}</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>handleOnPress(value)} style={styles.container}>
+            <Text style={styles.text}>{value}</Text>
+            </TouchableOpacity>
         )
     }
 }
